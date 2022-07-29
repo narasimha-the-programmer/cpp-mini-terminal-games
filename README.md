@@ -7,4 +7,4 @@ This repository provides the simple cpp mini - terminal games for students.
 * later i will convert this to GUI
 * For rules and playing guide please refer "About" section in-game.
 
- - THANK YOU 
+[ CASINO IS STILL UNDER DFVELOPMENT ]
