@@ -10,6 +10,19 @@ int amount = 0;
 int range_ref;
 int range;
 
+void color(int color) {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+void welcome() {
+	color(9);
+	cout << "## WELCOME TO CASINO ##" << endl;
+	color(8);
+	cout << "^^ A TERMINAL ROULETTE !! ^^" << endl;
+	cout << " * % DEVELOPED BY NARASIMHA MURTHY % *" << endl;
+	cout << endl;
+	color(7);
+	cout << "PRESS ANY KEY TO CONTINUE !! ";
+}
 void load(int k) {
 	char x = 219;
 	cout << "//// CASINO ////" << endl;
@@ -21,17 +34,81 @@ void load(int k) {
 	cout << endl;
 	system("cls");
 }
-int menu() {
-	cout << "-------- WELCOME TO CASINO ----------" << endl;
-	cout << "        1. Play " << endl;
-	cout << "        2. About" << endl;
-	cout << "        3. Exit" << endl;
-	cout << "-------------------------------------" << endl;;
-	int x;
-	cout << "ENTER YOUR CHOICE : ";
-	cin >> x;
-	return x;
+
+void gotoxy(int x, int y) {
+	COORD c;
+	c.X = x;
+	c.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
+
+int menu() {
+	int counter = 2;
+	char key;
+	int set[] = { 7,7,7 };
+	gotoxy(0, 0);
+	color(8);
+	cout << "* * * * CASINO * * * *" << endl;
+	gotoxy(0, 1);
+	cout << "----------------------" << endl;
+	color(set[0]);
+
+	for (int i = 0;;) {
+		gotoxy(0, 2);
+		color(set[0]);
+		cout << "1. PLAY ";
+
+		gotoxy(0, 3);
+		color(set[1]);
+		cout << "2. ABOUT";
+		
+		gotoxy(0, 4);
+		color(set[2]);
+		cout << "3. EXIT";
+
+		gotoxy(0, 5);
+		color(6);
+		cout << "________________________________________" << endl;
+		cout << " USE ARROW KEYS TO SELECT YOUR OPTION !! ";
+		
+		color(3);
+		key = _getch();
+
+		if (key == 72 && (counter >= 2 && counter <= 3)) {
+			counter--;
+		}
+		if (key == 80 && (counter >= 1 && counter <= 2)) {
+			counter++;
+		}
+		set[0] = 7;
+		set[1] = 7;
+		set[2] = 7;
+
+		if (key == '\r') {
+			if (counter == 1) {
+				return 1;
+			}
+			if (counter == 2) {
+				return 2;
+			}
+			if (counter == 3) {
+				return 3;
+			}
+		}
+		if (counter == 1) {
+			set[0] = 10;
+		}
+		if (counter == 2) {
+			set[1] = 10;
+		}
+		if (counter == 3) {
+			set[2] = 10;
+		}
+	}
+	color(7);
+
+}
+
 void get_data() {
 	system("cls");
 	cout << " ENTER TOTAL AMOUNT : "; cin >> amount;
@@ -45,29 +122,33 @@ void get_data() {
 		goto back;
 	}
 }
+
 void try_ag() {
 	system("cls");
 	cout << "YOU LOST A LIFE ! TRY AGAIN " << endl;
 	cout << "----------------------------";
 	life--;
 }
+
 int random() {
 	srand(time(0));
 	int ref_rand = rand() % range;
 	ref_rand = 3;
 	return ref_rand;
 }
+
 void lose() {
 	cout << "YOU LOSE ! ";
 }
+
 void win() {
 	system("cls");
 	cout << "CONGRATULATIONS !! " << endl;
 	cout << "YOU WON !! " << endl;
 	system("pause>0");
 	cout << "PRESS ANY KEY TO CONTINUE !!" << endl;
-
 }
+
 void casino() {
 	int guess;
     int bet_amt;
@@ -84,7 +165,7 @@ void casino() {
 			loop1:cout << "ENTER BET AMOUNT : "; cin >> bet_amt;
 			cout << "---- ----- -------- ----- ---------- ---- " << endl;
 			if (bet_amt > amount) {
-				cout << "Try Again !! " << endl << endl;
+				cout << "INVALID BET !!  " << endl << endl;
 				goto loop1;
 			}
 			else {
@@ -94,18 +175,21 @@ void casino() {
 					win();
 				}
 				else {
-					if (amount == 0) {
+					if (amount == 0 || life==0) {
 						goto come;
 					}
 					else {
 						amount = amount - bet_amt;
 						cout << "LOST LIFE ! " << endl;
 					}
-					try_ag();
+			 		if (amount != 0 && life != 0) {
+						try_ag();
+					}
+					else {
+						goto come;
+					}
 			}
-			cout << "BET IS INVALID !! " << endl;
-			cout << "|||  TRY AGAIN !! |||" << endl << endl;
-			}
+		  }
 		}
 	}
 }
@@ -131,7 +215,9 @@ here:a = _getch();
 	}
 }
 int main() {
+	welcome();
 	system("pause>null");
+	cout << endl;
 	load(20);
 	int choice;
 back:choice = menu();
@@ -159,4 +245,4 @@ back:choice = menu();
 		goto back;
 	}
 	system("pause>0");
-}
+}			 						
